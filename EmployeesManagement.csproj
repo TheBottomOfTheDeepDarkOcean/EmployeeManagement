@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-EmployeesManagement-0b43c2a8-f66c-4780-b593-321158d0e12a</UserSecretsId>
   </PropertyGroup>
