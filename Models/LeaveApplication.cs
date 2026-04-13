@@ -15,9 +15,13 @@ namespace EmployeesManagement.Models
 
         [Display(Name = "Start Date")]
 
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+
         public DateTime StartDate { get; set; }
 
         [Display(Name = "End Date")]
+
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
 
         public DateTime EndDate { get; set; }
 
@@ -44,5 +48,8 @@ namespace EmployeesManagement.Models
         public int StatusId { get; set; }
 
         public SystemCodeDetail Status { get; set; }
+
+        [Display(Name = "Approval Notes")]
+        public string ApprovalNotes { get; set; }
     }
 }
