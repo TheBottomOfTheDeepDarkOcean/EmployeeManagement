@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using EmployeesManagement.Data;
+﻿using EmployeesManagement.Data;
 using EmployeesManagement.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
@@ -58,6 +54,9 @@ namespace EmployeesManagement.Controllers
         {
             if (ModelState.IsValid)
             {
+                var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                leaveType.CreatedById = Userid;
+                leaveType.CreatedOn = DateTime.Now;
                 _context.Add(leaveType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -97,8 +96,14 @@ namespace EmployeesManagement.Controllers
             {
                 try
                 {
-                    _context.Update(leaveType);
-                    await _context.SaveChangesAsync();
+                    var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                    //Get old Values
+                    var oldleavetype = await _context.LeaveTypes.FindAsync(id);
+                    leaveType.ModifiedOn = DateTime.Now;
+                    leaveType.ModifiedById = Userid;
+                    _context.Entry(oldleavetype).CurrentValues.SetValues(leaveType);
+                    await _context.SaveChangesAsync(Userid);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -144,8 +149,8 @@ namespace EmployeesManagement.Controllers
             {
                 _context.LeaveTypes.Remove(leaveType);
             }
-
-            await _context.SaveChangesAsync();
+            var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            await _context.SaveChangesAsync(Userid);
             return RedirectToAction(nameof(Index));
         }
 
