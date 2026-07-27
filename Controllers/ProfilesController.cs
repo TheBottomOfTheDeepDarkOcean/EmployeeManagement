@@ -42,5 +42,39 @@ namespace EmployeesManagement.Controllers
             await _context.SaveChangesAsync(Userid);
             return RedirectToAction("Index");
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> UserRights(string id)
+        {
+            var tasks = new ProfileViewModel();
+            tasks.RoleId = id;
+            tasks.Profiles = await _context.SystemProfiles
+                .Include(s => s.Profile)
+               .Include("Children.Children.Children")
+               .OrderBy(x => x.Order)
+               .ToListAsync();
+
+            tasks.RolesProfilesIds = await _context.RoleProfiles.Where(x => x.RoleId == id).Select(r => r.TaskId).ToListAsync();
+
+            return View(tasks);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UserGroupRights(string id, ProfileViewModel vm)
+        {
+            var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            foreach (var taskId in vm.Ids)
+            {
+                var role = new RoleProfile
+                {
+                    TaskId = taskId,
+                    RoleId = id,
+                };
+                _context.RoleProfiles.Add(role);
+                await _context.SaveChangesAsync(Userid);
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
