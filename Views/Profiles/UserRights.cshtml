@@ -56,7 +56,15 @@
                                                 <th></th>
                                                 <td>@actions.Name</td>
                                                 <td>
-                                                    <label><input type="checkbox" name="Ids[]" value="@actions.Id" /></label>
+                                                        @if(Model.RolesRightsIds.Contains(actions.Id))
+                                                        {
+                                                        <label><input type="checkbox" name="Ids[]" value="@actions.Id" checked="checked" /></label>
+                                                        } else
+                                                        {
+                                                        <label><input type="checkbox" name="Ids[]" value="@actions.Id" /></label>
+
+                                                        }
+
                                                 </td>
                                             </tr>
                                             }

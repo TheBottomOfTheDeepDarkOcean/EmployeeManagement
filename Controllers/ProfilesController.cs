@@ -4,6 +4,7 @@ using EmployeesManagement.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
@@ -55,7 +56,7 @@ namespace EmployeesManagement.Controllers
                .OrderBy(x => x.Order)
                .ToListAsync();
 
-            tasks.RolesProfilesIds = await _context.RoleProfiles.Where(x => x.RoleId == id).Select(r => r.TaskId).ToListAsync();
+            tasks.RolesRightsIds = await _context.RoleProfiles.Where(x => x.RoleId == id).Select(r => r.TaskId).ToListAsync();
 
             return View(tasks);
         }
@@ -64,7 +65,10 @@ namespace EmployeesManagement.Controllers
         public async Task<ActionResult> UserGroupRights(string id, ProfileViewModel vm)
         {
             var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            foreach (var taskId in vm.Ids)
+            var allrights = await _context.RoleProfiles.Where(x => x.RoleId == id).ToListAsync();
+            _context.RoleProfiles.RemoveRange(allrights);
+            await _context.SaveChangesAsync(Userid);
+            foreach (var taskId in vm.Ids.Distinct())
             {
                 var role = new RoleProfile
                 {
