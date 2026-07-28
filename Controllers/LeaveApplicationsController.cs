@@ -3,6 +3,7 @@ using EmployeesManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace EmployeesManagement.Controllers
 {
@@ -245,14 +246,14 @@ namespace EmployeesManagement.Controllers
             {
                 return NotFound();
             }
-
+            var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             leaveApplication.ApprovedOn = DateTime.Now;
             leaveApplication.ApprovedById = "CielSs";
             leaveApplication.StatusId = rejectstatus!.Id;
             leaveApplication.ApprovalNotes = leave.ApprovalNotes;
 
             _context.Update(leaveApplication);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(Userid);
 
             ViewData["DurationId"] = new SelectList(_context.SystemCodeDetails.Include(x => x.SystemCode).Where(y => y.SystemCode.Code == "LeaveDuration"), "Id", "Description");
             ViewData["EmployeeId"] = new SelectList(_context.Employees, "Id", "FullName");
