@@ -12,7 +12,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-12">
-                <form asp-action="Create">
+                <form asp-action="Create" enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="row">
                         <div class="col-md-6">
@@ -97,6 +97,13 @@
                                 <label asp-for="DesignationId" class="control-label"></label>
                                 <select asp-for="DesignationId" class="form-control" asp-items="ViewBag.DesignationId"></select>
                                 <span asp-validation-for="DesignationId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Photo" class="control-label"></label>
+                                <input class="form-control" type="file" accept=".png, .jpg, .jpeg" id="photo" name="employeephoto" />
+                                <span asp-validation-for="Photo" class="text-danger"></span>
                             </div>
                         </div>
                     </div>

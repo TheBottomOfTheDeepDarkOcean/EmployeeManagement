@@ -55,5 +55,10 @@ namespace EmployeesManagement.Models
         public int? GenderId { get; set; }
 
         public SystemCodeDetail Gender { get; set; }
+
+        [DisplayName("Employee Photo")]
+
+        public string? Photo { get; set; }
+
     }
 }

@@ -10,10 +10,12 @@ namespace EmployeesManagement.Controllers
     public class EmployeesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _configuration;
 
-        public EmployeesController(ApplicationDbContext context)
+        public EmployeesController(IConfiguration configuration, ApplicationDbContext context)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         // GET: Employees
@@ -55,8 +57,18 @@ namespace EmployeesManagement.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Employee employee)
+        public async Task<IActionResult> Create(Employee employee, IFormFile employeephoto)
         {
+            if (employeephoto != null && employeephoto.Length > 0)
+            {
+                var fileName = "EmployeePhoto_" + DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + employeephoto.FileName;
+                var path = _configuration["FileSettings:UploadFolder"]!;
+                var filepath = Path.Combine(path, fileName);
+                var stream = new FileStream(filepath, FileMode.Create);
+                await employeephoto.CopyToAsync(stream);
+                employee.Photo = fileName;
+            }
+
             var Userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             employee.CreatedById = Userid;
             employee.CreatedOn = DateTime.Now;
