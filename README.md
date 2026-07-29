@@ -31,7 +31,7 @@ Dự án tập trung vào việc xử lý các bài toán nghiệp vụ nhân s�
 
 ## 🛠 Công Nghệ & Kiến Trúc Sử Dụng
 
-- **Backend:** C# (.NET 8), ASP.NET Core MVC, Entity Framework Core (EF Core Code-First & Migrations), LINQ, Data Annotations (`[DisplayName]`).
+- **Backend:** C# (.NET 10), ASP.NET Core MVC, Entity Framework Core (EF Core Code-First & Migrations), LINQ, Data Annotations (`[DisplayName]`).
 - **Database:** Microsoft SQL Server.
 - **Frontend:** HTML5, CSS3, JavaScript, jQuery, AdminLTE v3 Dashboard Template, Bootstrap.
 - **Tools & Version Control:** Visual Studio 2022, Git, GitHub.
